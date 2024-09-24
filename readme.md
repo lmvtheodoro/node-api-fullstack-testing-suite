@@ -45,3 +45,27 @@ cd _tests/integration
 ```bash
 npx cypress run --env ENV=local
 ```
+
+## Running API Locally
+
+1. **Set the DB_HOST variable**  
+   - For Linux/Mac:
+```bash
+     export DB_HOST=localhost
+```
+   - For Windows:
+```bash
+      set DB_HOST=localhost
+```
+
+2. **Run `docker-compose up`**  
+
+3. **Stop only `nodeapi-api-1`**  
+```bash
+   docker stop nodeapi-api-1
+```
+
+4. **Run API**
+```bash
+   npm start
+```
