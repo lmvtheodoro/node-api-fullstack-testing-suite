@@ -3,3 +3,6 @@ CREATE TABLE IF NOT EXISTS users (
     name VARCHAR NOT NULL,
     email VARCHAR NOT NULL
 );
+
+ALTER TABLE users
+ADD CONSTRAINT unique_email UNIQUE (email);

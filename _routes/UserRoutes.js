@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const UserController = require('../_controllers/UserController.js');
+const { check, validationResult } = require('express-validator');
 
 /**
  * @swagger
@@ -43,15 +44,36 @@ const UserController = require('../_controllers/UserController.js');
  *       '400':
  *         description: Request error
  */
-router.post('/', async (req, res) => {
-    const { name, email } = req.body;
-    try {
-        const newUser = await UserController.createUser(name, email); // Await the call
-        res.status(201).json(newUser);
-    } catch (err) {
-        res.status(500).json({ error: 'Error creating user' });
+router.post(
+    '/',
+    [
+      check('name').notEmpty().withMessage('Name is required'),
+      check('email').isEmail().withMessage('Invalid email format'),
+    ],
+    async (req, res) => {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+
+      const { name, email } = req.body;
+      try {
+        const newUser = await UserController.createUser(name, email);
+        return res.status(201).json({
+            message: 'User created successfully',
+            user: newUser,
+            link: `/users/${newUser.id}`
+        });
+      } catch (err) {
+        if (err.code === '400') {
+          return res.status(400).json({ error: err.message });
+        } else if (err.code === '23505') {
+          return res.status(409).json({ error: 'User already exists' });
+        }
+        return res.status(500).json({ error: 'Error creating user' });
+      }
     }
-});
+);
 
 /**
  * @swagger
@@ -78,7 +100,7 @@ router.post('/', async (req, res) => {
  */
 router.get('/', async (req, res) => {
     try {
-        const users = await UserController.getUsers(); // Await the call
+        const users = await UserController.getUsers();
         res.json(users);
     } catch (err) {
         res.status(500).json({ error: 'Error fetching users' });
