@@ -4,7 +4,7 @@ class User {
             throw new Error('Invalid ID');
         }
 
-        if (!name || typeof name !== 'string' || name.trim() === '') {
+        if (!name || typeof name !== 'string' || name.trim() === '' || /\d/.test(name)) {
             throw new Error('Invalid name');
         }
 

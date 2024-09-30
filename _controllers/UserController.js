@@ -4,18 +4,18 @@ const pool = require('../_db/Pool.js');
 async function createUser(name, email) {
     const id = Date.now().toString();
     console.log('Creating user with name:', name, 'and email:', email);
-    const newUser = new User(id, name, email);
-    const query = 'INSERT INTO users (id, name, email) VALUES ($1, $2, $3) RETURNING *'; 
-    const values = [newUser.id, newUser.name, newUser.email]; 
-
     try {
-        console.log('Executing query:', query, 'with values:', values);
+        const newUser = new User(id, name, email);
+        
+        const query = 'INSERT INTO users (id, name, email) VALUES ($1, $2, $3) RETURNING *'; 
+        const values = [newUser.id, newUser.name, newUser.email]; 
+        
         const result = await pool.query(query, values);
-        console.log('User created successfully:', result.rows[0]);
         return result.rows[0];
     } catch (err) {
-        console.error('Error creating user:', err.message);
-        console.error('Full error details:', err);
+        if (err.message.includes('Invalid')) {
+            throw { code: '400', message: err.message };
+        }
         throw err;
     }
 }
