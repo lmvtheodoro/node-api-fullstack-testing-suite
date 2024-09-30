@@ -9,10 +9,19 @@ This project demonstrates the implementation of unit and integration tests using
 
 ## Technologies Used
 
+<table>
+    <tr>
+        <td><img src="https://hopetutors.com/wp-content/uploads/2017/03/nodejs-logo-1.png" width="30" /></td>
+        <td><img src="https://w7.pngwing.com/pngs/657/27/png-transparent-postgresql-original-wordmark-logo-icon-thumbnail.png" width="30" /></td>
+        <td><img src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/jest-js-icon.png" width="30" /></td>
+        <td><img src="https://assets.streamlinehq.com/image/private/w_300,h_300,ar_1/f_auto/v1/icons/3/cypress-icon-moigrz5nimpd7rsob0bisu.png/cypress-icon-pg9bdlubveoefqouilbg.png?_a=DAJFJtWIZAAC" width="30" /></td>
+    </tr>
+</table>
+
 - **Node.js**: Development platform used to build the API.
 - **PostgreSQL**: Relational database used in the project.
 - **Jest**: Testing framework used for unit tests.
-- **Cypress**: Front-end testing framework used for API integration tests.
+- **Cypress**: Testing framework used for API integration tests.
 
 ## Setup
 
