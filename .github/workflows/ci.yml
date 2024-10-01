@@ -14,13 +14,13 @@ jobs:
 
     services:
       db:
-        image: postgres:latest
+        image: postgres:13
         env:
           POSTGRES_DB: mydatabase
           POSTGRES_USER: admin
           POSTGRES_PASSWORD: password
         ports:
-          - 5432:5432
+          - 5433:5432
         options: >-
           --health-cmd="pg_isready -U admin"
           --health-interval=10s
@@ -34,21 +34,28 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
+      - name: Stop Running Containers
+        run: |
+          docker ps -q | xargs -r docker stop
+
       - name: Clean up Existing Containers
         run: |
-          docker compose down || true
+          docker-compose down || true
+
+      - name: Wait before starting containers
+        run: sleep 10
 
       - name: Build and Start Containers
         run: |
-          docker compose up -d --build
+          docker-compose up -d --build  # Comando sem hífen
 
       - name: Wait for Database to be Ready
         run: |
-          docker exec -t db bash -c 'until pg_isready -U admin; do sleep 5; done'
+          docker exec -t node-api-fullstack-testing-suite-db-1 bash -c 'until pg_isready -U admin; do sleep 5; done'
 
       - name: Run Unit Tests
         run: |
-          docker exec api npm test
+          docker exec node-api-fullstack-testing-suite-api-1 npm test
 
   cypress:
     runs-on: ubuntu-latest
@@ -62,3 +69,10 @@ jobs:
         run: |
           cd _tests/integration
           npx cypress run --env env=local
+
+      - name: Clean up Docker
+        run: |
+          docker-compose down
+
+      - name: List Running Containers
+        run: docker ps

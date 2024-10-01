@@ -5,7 +5,7 @@ const pool = new Pool({
   host: process.env.DB_HOST || 'localhost',
   database: process.env.POSTGRES_DB || 'mydatabase',
   password: process.env.POSTGRES_PASSWORD || 'password',
-  port: process.env.DB_PORT || 5432,
+  port: process.env.DB_PORT || 5433,
 });
 
 pool.connect()

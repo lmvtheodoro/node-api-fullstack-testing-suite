@@ -10,6 +10,7 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: mydatabase
       DB_HOST: db
+      DB_PORT: 5433
     networks:
       - mynetwork
 
