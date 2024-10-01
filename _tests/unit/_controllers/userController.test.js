@@ -1,12 +1,26 @@
 const userController = require('../../../_controllers/UserController');
 const pool = require('../../../_db/Pool');
 
-// Mock do pool.query
-jest.mock('../../../_db/Pool');
+//pool.query Mock
+jest.mock('../../../_db/Pool', () => {
+    return {
+        query: jest.fn(),
+        connect: jest.fn().mockResolvedValue({
+            release: jest.fn(), 
+        }),
+        end: jest.fn().mockResolvedValue(undefined),
+    };
+});
 
 describe('User Controller', () => {
+
+    afterAll(async () => {
+        await pool.end();
+    });
+
     afterEach(() => {
         jest.clearAllMocks();
+        jest.resetModules(); 
     });
 
     test('createUser should return a new user', async () => {
