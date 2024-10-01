@@ -31,16 +31,6 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v2
 
-      - name: Set up Docker
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y docker.io
-
-      - name: Check Docker and Docker Compose version
-        run: |
-          docker --version
-          docker compose version  # Comando sem hífen
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
