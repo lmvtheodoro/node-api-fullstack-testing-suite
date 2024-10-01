@@ -1,4 +1,5 @@
 const express = require('express');
+const axios = require('axios');
 const router = express.Router();
 const UserController = require('../_controllers/UserController.js');
 const { check, validationResult } = require('express-validator');
@@ -234,6 +235,58 @@ router.delete('/:id', async (req, res) => {
         }
     } catch (err) {
         res.status(500).json({ error: 'Error deleting user' });
+    }
+});
+
+/**
+ * @swagger
+ * /user/{id}/activities:
+ *   get:
+ *     summary: Fetches activities for a specific user
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the user
+ *     responses:
+ *       '200':
+ *         description: List of user activities
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 activities:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       activity:
+ *                         type: string
+ *       '500':
+ *         description: Error fetching user activities
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Error fetching user activities
+ */
+router.get('/user/:id/activities', async (req, res) => {
+    const userId = req.params.id;
+
+    try {
+        const response = await axios.get(`http://another-api.com/user_activities/${userId}`);
+        const activities = response.data;
+
+        return res.status(200).json({ activities });
+    } catch (error) {
+        return res.status(500).json({ error: 'Error fetching user activities' });
     }
 });
 

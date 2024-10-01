@@ -27,10 +27,10 @@ describe("Testing API through 'Black Box' Strategy", () => {
     apiRequests.postUser(newUser).then((response) => {
       console.log(response.body);
       expect(response.status).to.eq(201);
-      expect(response.body).to.have.property('id');
-      expect(response.body).to.have.property('name', newUser.name);
-      expect(response.body).to.have.property('email', newUser.email);      
-      newUserId = response.body.id
+      expect(response.body.user).to.have.property('id');
+      expect(response.body.user).to.have.property('name', newUser.name);
+      expect(response.body.user).to.have.property('email', newUser.email);      
+      newUserId = response.body.user.id
     });
   });
 

@@ -58,7 +58,16 @@ class ApiRequests {
             log: true,
             failOnStatusCode: false,
         }).as('delete user by id');
-    }  
+    }
+
+    getUserActivities(userId){
+        return cy.request({
+            method: "GET",
+            url: `${this.baseUrl}/users/${userId}/activities`, 
+            log: true,
+            failOnStatusCode: false,
+        }).as('get user activities by id');        
+    }
 }
 
 export default ApiRequests;
