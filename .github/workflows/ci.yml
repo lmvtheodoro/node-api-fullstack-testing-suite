@@ -40,14 +40,14 @@ jobs:
 
       - name: Clean up Existing Containers
         run: |
-          docker-compose down || true
+          docker compose down || true
 
       - name: Wait before starting containers
         run: sleep 10
 
       - name: Build and Start Containers
         run: |
-          docker-compose up -d --build  # Comando sem hífen
+          docker compose up -d --build  # Comando sem hífen
 
       - name: Wait for Database to be Ready
         run: |
@@ -72,7 +72,7 @@ jobs:
 
       - name: Clean up Docker
         run: |
-          docker-compose down
+          docker compose down
 
       - name: List Running Containers
         run: docker ps
