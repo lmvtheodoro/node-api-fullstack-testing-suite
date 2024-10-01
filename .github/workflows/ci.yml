@@ -47,31 +47,27 @@ jobs:
 
       - name: Build and Start Containers
         run: |
-          docker compose up -d --build
+          docker compose up -d --build  # Comando sem hífen
 
       - name: Wait for Database to be Ready
         run: |
           docker exec -t node-api-fullstack-testing-suite-db-1 bash -c 'until pg_isready -U admin; do sleep 5; done'
 
-  unit_tests:
-    runs-on: ubuntu-latest
-    needs: build
-
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
-
       - name: Run Unit Tests
         run: |
           docker exec node-api-fullstack-testing-suite-api-1 npm test
 
-  integration_tests:
+  cypress:
     runs-on: ubuntu-latest
     needs: build
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
+
+      - name: Build and Start Containers for Cypress
+        run: |
+          docker compose up -d
 
       - name: Wait for API to be Ready
         run: |
