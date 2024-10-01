@@ -51,11 +51,11 @@ jobs:
 
       - name: Wait for Database to be Ready
         run: |
-          docker exec -t node-api-fullstack-testing-suite-db-1 bash -c 'until pg_isready -U admin; do sleep 5; done'
+          docker exec -t db bash -c 'until pg_isready -U admin; do sleep 5; done'
 
       - name: Run Unit Tests
         run: |
-          docker exec node-api-fullstack-testing-suite-api-1 npm test
+          docker exec api npm test
 
   cypress:
     runs-on: ubuntu-latest
@@ -65,10 +65,17 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v2
 
+      - name: Build and Start Containers for Cypress
+        run: |
+          docker compose up -d
+
+      - name: Wait for API to be Ready
+        run: |
+          docker exec -t node-api-fullstack-testing-suite-api-1 bash -c 'until curl -s http://localhost:3000; do sleep 5; done'
+
       - name: Run Cypress Tests
         run: |
-          cd _tests/integration
-          npx cypress run --env env=local
+          docker exec node-api-fullstack-testing-suite-api-1 bash -c "cd _tests/integration && npx cypress run --env env=local"
 
       - name: Clean up Docker
         run: |
